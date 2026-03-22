@@ -1,20 +1,24 @@
+import StandingsTable from "./StandingsTable";
+
 const SCRAPER_URL = "https://prff-scraper-production.up.railway.app";
 
-interface Team {
-  rank: number;
-  team: string;
-  owner: string;
-  wins: string;
-  losses: string;
-  pointsFor: string;
-  pointsAgainst: string;
+async function getYears(): Promise<number[]> {
+  try {
+    const res = await fetch(`${SCRAPER_URL}/years`, { next: { revalidate: 300 } });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.years ?? [];
+  } catch {
+    return [];
+  }
 }
 
-async function getStandings(): Promise<{ standings: Team[]; updatedAt: string | null } | null> {
+async function getStandings(year?: number) {
   try {
-    const res = await fetch(`${SCRAPER_URL}/standings`, {
-      next: { revalidate: 300 },
-    });
+    const url = year
+      ? `${SCRAPER_URL}/standings?year=${year}`
+      : `${SCRAPER_URL}/standings`;
+    const res = await fetch(url, { next: { revalidate: 300 } });
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -22,13 +26,26 @@ async function getStandings(): Promise<{ standings: Team[]; updatedAt: string | 
   }
 }
 
-export default async function LeaderboardPage() {
-  const data = await getStandings();
+export default async function LeaderboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ year?: string }>;
+}) {
+  const params = await searchParams;
+  const selectedYear = params.year ? parseInt(params.year) : undefined;
+
+  const [years, data] = await Promise.all([
+    getYears(),
+    getStandings(selectedYear),
+  ]);
+
   const teams = data?.standings ?? [];
+  const displayYear = data?.year ?? selectedYear;
   const updatedAt = data?.updatedAt
     ? new Date(data.updatedAt).toLocaleString("en-US", {
         month: "short",
         day: "numeric",
+        year: "numeric",
         hour: "numeric",
         minute: "2-digit",
       })
@@ -36,14 +53,24 @@ export default async function LeaderboardPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">
-          League
-        </p>
-        <h1 className="text-3xl font-black text-white uppercase">🏆 Standings</h1>
-        <p className="text-gray-500 mt-1 text-sm">
-          Live standings scraped from CBS Sports — updates every hour.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">
+            League
+          </p>
+          <h1 className="text-3xl font-black text-white uppercase">
+            🏆 Standings
+            {displayYear && (
+              <span className="ml-3 text-amber-400">{displayYear}</span>
+            )}
+          </h1>
+          <p className="text-gray-500 mt-1 text-sm">
+            Scraped from CBS Sports · updates every hour
+          </p>
+        </div>
+
+        {/* Year selector */}
+        <StandingsTable years={years} selectedYear={selectedYear} />
       </div>
 
       <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
@@ -64,32 +91,49 @@ export default async function LeaderboardPage() {
               <tr>
                 <td colSpan={7} className="px-5 py-10 text-center text-gray-600 italic">
                   {data === null
-                    ? "Could not reach scraper service — check Railway deployment."
-                    : "Scraper is warming up — standings will appear within a few minutes."}
+                    ? "Could not reach scraper — check Railway."
+                    : years.length === 0
+                    ? "Scraper is warming up — data will appear within a few minutes."
+                    : `No standings found for ${displayYear ?? "this year"}.`}
                 </td>
               </tr>
             ) : (
-              teams.map((team, i) => (
-                <tr
-                  key={i}
-                  className="border-t border-white/5 hover:bg-white/5 transition-colors"
-                >
-                  <td className="px-5 py-3 font-black text-amber-500">{team.rank ?? i + 1}</td>
-                  <td className="px-5 py-3 font-semibold text-white">{team.team}</td>
-                  <td className="px-5 py-3 text-gray-400">{team.owner}</td>
-                  <td className="px-5 py-3 text-right text-green-400 font-bold">{team.wins}</td>
-                  <td className="px-5 py-3 text-right text-red-400 font-bold">{team.losses}</td>
-                  <td className="px-5 py-3 text-right text-gray-300">{team.pointsFor}</td>
-                  <td className="px-5 py-3 text-right text-gray-500">{team.pointsAgainst}</td>
-                </tr>
-              ))
+              teams.map(
+                (
+                  team: {
+                    rank: number;
+                    team: string;
+                    owner: string;
+                    wins: string;
+                    losses: string;
+                    pointsFor: string;
+                    pointsAgainst: string;
+                  },
+                  i: number
+                ) => (
+                  <tr
+                    key={i}
+                    className="border-t border-white/5 hover:bg-white/5 transition-colors"
+                  >
+                    <td className="px-5 py-3 font-black text-amber-500">
+                      {team.rank ?? i + 1}
+                    </td>
+                    <td className="px-5 py-3 font-semibold text-white">{team.team}</td>
+                    <td className="px-5 py-3 text-gray-400">{team.owner}</td>
+                    <td className="px-5 py-3 text-right text-green-400 font-bold">{team.wins}</td>
+                    <td className="px-5 py-3 text-right text-red-400 font-bold">{team.losses}</td>
+                    <td className="px-5 py-3 text-right text-gray-300">{team.pointsFor}</td>
+                    <td className="px-5 py-3 text-right text-gray-500">{team.pointsAgainst}</td>
+                  </tr>
+                )
+              )
             )}
           </tbody>
         </table>
       </div>
 
       <p className="text-xs text-gray-700 text-right">
-        {updatedAt ? `Last updated ${updatedAt}` : "Waiting for first scrape..."} · Updates hourly
+        {updatedAt ? `Last scraped ${updatedAt}` : "Waiting for first scrape..."} · Updates hourly
       </p>
     </div>
   );
