@@ -19,7 +19,6 @@ const navLinks = [
   { href: "/events", label: "Events" },
   { href: "/rules", label: "Rules" },
   { href: "/photos", label: "Media" },
-  { href: "/admin", label: "Sync" },
 ];
 
 export default function RootLayout({

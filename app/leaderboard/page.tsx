@@ -1,24 +1,9 @@
-import StandingsTable from "./StandingsTable";
-
-const SCRAPER_URL = "https://prff-scraper-production.up.railway.app";
-
-async function getYears(): Promise<number[]> {
+async function getStandings() {
   try {
-    const res = await fetch(`${SCRAPER_URL}/years`, { next: { revalidate: 300 } });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.years ?? [];
-  } catch {
-    return [];
-  }
-}
-
-async function getStandings(year?: number) {
-  try {
-    const url = year
-      ? `${SCRAPER_URL}/standings?year=${year}`
-      : `${SCRAPER_URL}/standings`;
-    const res = await fetch(url, { next: { revalidate: 300 } });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/api/cbs/standings`,
+      { next: { revalidate: 300 } }
+    );
     if (!res.ok) return null;
     return res.json();
   } catch {
@@ -26,51 +11,26 @@ async function getStandings(year?: number) {
   }
 }
 
-export default async function LeaderboardPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ year?: string }>;
-}) {
-  const params = await searchParams;
-  const selectedYear = params.year ? parseInt(params.year) : undefined;
-
-  const [years, data] = await Promise.all([
-    getYears(),
-    getStandings(selectedYear),
-  ]);
-
+export default async function LeaderboardPage() {
+  const data = await getStandings();
   const teams = data?.standings ?? [];
-  const displayYear = data?.year ?? selectedYear;
-  const updatedAt = data?.updatedAt
-    ? new Date(data.updatedAt).toLocaleString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-      })
-    : null;
+  const displayYear = data?.year;
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">
-            League
-          </p>
-          <h1 className="text-3xl font-black text-white uppercase">
-            🏆 Standings
-            {displayYear && (
-              <span className="ml-3 text-amber-400">{displayYear}</span>
-            )}
-          </h1>
-          <p className="text-gray-500 mt-1 text-sm">
-            Scraped from CBS Sports · updates every hour
-          </p>
-        </div>
-
-        {/* Year selector */}
-        <StandingsTable years={years} selectedYear={selectedYear} />
+      <div>
+        <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">
+          League
+        </p>
+        <h1 className="text-3xl font-black text-white uppercase">
+          🏆 Standings
+          {displayYear && (
+            <span className="ml-3 text-amber-400">{displayYear}</span>
+          )}
+        </h1>
+        <p className="text-gray-500 mt-1 text-sm">
+          Live from CBS Sports · updates every 5 minutes
+        </p>
       </div>
 
       <div className="bg-white/5 border border-white/10 rounded-xl overflow-hidden">
@@ -91,10 +51,8 @@ export default async function LeaderboardPage({
               <tr>
                 <td colSpan={7} className="px-5 py-10 text-center text-gray-600 italic">
                   {data === null
-                    ? "Could not reach scraper — check Railway."
-                    : years.length === 0
-                    ? "Scraper is warming up — data will appear within a few minutes."
-                    : `No standings found for ${displayYear ?? "this year"}.`}
+                    ? "Could not reach CBS Sports — check credentials."
+                    : "No standings available."}
                 </td>
               </tr>
             ) : (
@@ -131,10 +89,6 @@ export default async function LeaderboardPage({
           </tbody>
         </table>
       </div>
-
-      <p className="text-xs text-gray-700 text-right">
-        {updatedAt ? `Last scraped ${updatedAt}` : "Waiting for first scrape..."} · Updates hourly
-      </p>
     </div>
   );
 }
