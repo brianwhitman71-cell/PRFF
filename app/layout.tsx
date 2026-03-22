@@ -9,16 +9,16 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Parsons Run Fantasy Football",
+  title: "PRFF — Parsons Run Fantasy Football",
   description: "The official site of the Parsons Run Fantasy Football league",
 };
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/", label: "Overview" },
+  { href: "/leaderboard", label: "Standings" },
   { href: "/events", label: "Events" },
   { href: "/rules", label: "Rules" },
-  { href: "/photos", label: "Photos" },
+  { href: "/photos", label: "Media" },
 ];
 
 export default function RootLayout({
@@ -28,21 +28,26 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-gray-950 text-gray-100">
-        <header className="bg-green-900 border-b border-green-700 shadow-lg">
-          <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <Link href="/" className="text-2xl font-bold tracking-tight text-white hover:text-green-300 transition-colors">
-              🏈 PRFF
-              <span className="ml-2 text-sm font-normal text-green-300 hidden sm:inline">
-                Parsons Run Fantasy Football
+      <body className="min-h-full flex flex-col" style={{ background: "var(--background)", color: "var(--foreground)" }}>
+        {/* Top nav */}
+        <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md bg-black/40">
+          <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            <Link
+              href="/"
+              className="flex items-center gap-2 font-bold text-lg tracking-tight text-white hover:opacity-80 transition-opacity"
+            >
+              <span className="text-2xl">🏈</span>
+              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                PRFF
               </span>
             </Link>
-            <nav className="flex gap-1 flex-wrap justify-center">
+
+            <nav className="flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-3 py-1.5 rounded-md text-sm font-medium text-green-100 hover:bg-green-700 hover:text-white transition-colors"
+                  className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
                 >
                   {link.label}
                 </Link>
@@ -55,8 +60,8 @@ export default function RootLayout({
           {children}
         </main>
 
-        <footer className="bg-gray-900 border-t border-gray-800 text-center text-sm text-gray-500 py-4">
-          © {new Date().getFullYear()} Parsons Run Fantasy Football
+        <footer className="border-t border-white/10 text-center text-sm text-gray-600 py-5">
+          © {new Date().getFullYear()} Parsons Run Fantasy Football · PRFF
         </footer>
       </body>
     </html>

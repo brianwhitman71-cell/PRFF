@@ -1,29 +1,35 @@
 export default function LeaderboardPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">🏆 Leaderboard</h1>
-      <p className="text-gray-400">
-        Current standings will appear here. Add your league data to populate
-        this page.
-      </p>
+      <div>
+        <p className="text-xs font-semibold uppercase tracking-widest text-yellow-400 mb-1">
+          League
+        </p>
+        <h1 className="text-3xl font-bold text-white">🏆 Standings</h1>
+        <p className="text-gray-500 mt-1">
+          Current standings — add your league data to populate this table.
+        </p>
+      </div>
 
-      {/* Placeholder table */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+      <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-green-900 text-green-100">
-            <tr>
-              <th className="px-4 py-3 text-left">Rank</th>
-              <th className="px-4 py-3 text-left">Team</th>
-              <th className="px-4 py-3 text-left">Owner</th>
-              <th className="px-4 py-3 text-right">W</th>
-              <th className="px-4 py-3 text-right">L</th>
-              <th className="px-4 py-3 text-right">Pts For</th>
-              <th className="px-4 py-3 text-right">Pts Against</th>
+          <thead>
+            <tr className="border-b border-white/10 text-xs uppercase tracking-widest text-gray-500">
+              <th className="px-5 py-4 text-left">Rank</th>
+              <th className="px-5 py-4 text-left">Team</th>
+              <th className="px-5 py-4 text-left">Owner</th>
+              <th className="px-5 py-4 text-right">W</th>
+              <th className="px-5 py-4 text-right">L</th>
+              <th className="px-5 py-4 text-right">Pts For</th>
+              <th className="px-5 py-4 text-right">Pts Against</th>
             </tr>
           </thead>
           <tbody>
-            <tr className="border-t border-gray-800 text-gray-500 italic">
-              <td colSpan={7} className="px-4 py-6 text-center">
+            <tr>
+              <td
+                colSpan={7}
+                className="px-5 py-10 text-center text-gray-600 italic"
+              >
                 No data yet — add your league standings here.
               </td>
             </tr>
