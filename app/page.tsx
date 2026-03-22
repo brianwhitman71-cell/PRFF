@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const quickLinks = [
   {
@@ -78,6 +79,30 @@ export default function Home() {
             </div>
           </div>
         ))}
+      </section>
+
+      {/* Loser Sign */}
+      <section className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+        <Image
+          src="/loser-sign.jpg"
+          alt="Parsons Run Fantasy Football Last Place Loser yard sign"
+          width={1280}
+          height={960}
+          className="w-full object-cover max-h-[480px]"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute bottom-0 left-0 p-6">
+          <p className="text-xs font-bold uppercase tracking-widest text-red-400 mb-1">
+            League Tradition
+          </p>
+          <h2 className="text-2xl font-black text-white uppercase leading-tight">
+            Last Place Gets the Sign
+          </h2>
+          <p className="text-gray-400 text-sm mt-1">
+            Finish last and the whole neighborhood knows it.
+          </p>
+        </div>
       </section>
 
       {/* Quick Links */}
