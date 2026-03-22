@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0f;
-  --foreground: #f1f5f9;
+  --background: #0d0e12;
+  --foreground: #e8eaf0;
 }
 
 body {
@@ -12,11 +12,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Gradient border card utility */
 .gradient-card {
   position: relative;
-  border-radius: 1rem;
-  background: #111827;
+  border-radius: 0.75rem;
+  background: #13151c;
   z-index: 0;
 }
 
@@ -24,8 +23,8 @@ body {
   content: "";
   position: absolute;
   inset: -1px;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #2563eb, #9333ea);
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #b91c1c, #d97706);
   z-index: -1;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -35,8 +34,7 @@ body {
   opacity: 1;
 }
 
-/* Dot pattern overlay */
 .dot-pattern {
-  background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
   background-size: 24px 24px;
 }

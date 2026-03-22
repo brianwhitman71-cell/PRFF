@@ -30,14 +30,14 @@ export default function RootLayout({
     <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col" style={{ background: "var(--background)", color: "var(--foreground)" }}>
         {/* Top nav */}
-        <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md bg-black/40">
+        <header className="sticky top-0 z-50 border-b border-white/10 backdrop-blur-md bg-black/50">
           <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
             <Link
               href="/"
-              className="flex items-center gap-2 font-bold text-lg tracking-tight text-white hover:opacity-80 transition-opacity"
+              className="flex items-center gap-2 font-black text-lg tracking-tight text-white hover:opacity-80 transition-opacity uppercase"
             >
               <span className="text-2xl">🏈</span>
-              <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-red-500 to-amber-400 bg-clip-text text-transparent">
                 PRFF
               </span>
             </Link>
@@ -47,7 +47,7 @@ export default function RootLayout({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-3 py-1.5 rounded-lg text-sm font-medium text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                  className="px-3 py-1.5 rounded-lg text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/10 transition-all uppercase tracking-wide"
                 >
                   {link.label}
                 </Link>

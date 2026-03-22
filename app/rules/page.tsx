@@ -2,7 +2,7 @@ const sections = [
   {
     title: "League Format",
     icon: "🏟️",
-    gradient: "from-blue-500 to-cyan-500",
+    gradient: "from-red-700 to-red-500",
     items: [
       "Number of teams: TBD",
       "Regular season length: TBD weeks",
@@ -13,22 +13,13 @@ const sections = [
   {
     title: "Roster Settings",
     icon: "📋",
-    gradient: "from-purple-500 to-pink-500",
-    items: [
-      "QB: 1",
-      "RB: 2",
-      "WR: 2",
-      "TE: 1",
-      "Flex (RB/WR/TE): 1",
-      "K: 1",
-      "DEF: 1",
-      "Bench: TBD",
-    ],
+    gradient: "from-gray-600 to-gray-500",
+    items: ["QB: 1", "RB: 2", "WR: 2", "TE: 1", "Flex (RB/WR/TE): 1", "K: 1", "DEF: 1", "Bench: TBD"],
   },
   {
     title: "Scoring",
     icon: "🎯",
-    gradient: "from-green-500 to-teal-500",
+    gradient: "from-amber-600 to-yellow-500",
     items: [
       "Passing TD: 4 pts",
       "Rushing/Receiving TD: 6 pts",
@@ -41,23 +32,14 @@ const sections = [
   {
     title: "Trade & Waiver Rules",
     icon: "🔄",
-    gradient: "from-orange-500 to-red-500",
-    items: [
-      "Trade deadline: TBD",
-      "Waiver type: TBD",
-      "Waiver reset: TBD",
-    ],
+    gradient: "from-red-800 to-red-600",
+    items: ["Trade deadline: TBD", "Waiver type: TBD", "Waiver reset: TBD"],
   },
   {
     title: "Dues & Payouts",
     icon: "💰",
-    gradient: "from-yellow-500 to-orange-500",
-    items: [
-      "Entry fee: TBD",
-      "1st place: TBD",
-      "2nd place: TBD",
-      "Other prizes: TBD",
-    ],
+    gradient: "from-amber-500 to-yellow-400",
+    items: ["Entry fee: TBD", "1st place: TBD", "2nd place: TBD", "Other prizes: TBD"],
   },
 ];
 
@@ -65,13 +47,12 @@ export default function RulesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-purple-400 mb-1">
+        <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-1">
           League
         </p>
-        <h1 className="text-3xl font-bold text-white">📋 Rules</h1>
-        <p className="text-gray-500 mt-1">
-          Official rules and settings for Parsons Run Fantasy Football. Update
-          these to match your league configuration.
+        <h1 className="text-3xl font-black text-white uppercase">📋 Rules</h1>
+        <p className="text-gray-500 mt-1 text-sm">
+          Official rules and settings for Parsons Run Fantasy Football.
         </p>
       </div>
 
@@ -79,7 +60,7 @@ export default function RulesPage() {
         {sections.map((section) => (
           <div
             key={section.title}
-            className="bg-white/5 border border-white/10 rounded-2xl p-5 hover:border-white/20 transition-colors"
+            className="bg-white/5 border border-white/10 rounded-xl p-5 hover:border-red-800/50 transition-colors"
           >
             <div className="flex items-center gap-3 mb-4">
               <div
@@ -87,15 +68,14 @@ export default function RulesPage() {
               >
                 {section.icon}
               </div>
-              <h2 className="font-semibold text-white">{section.title}</h2>
+              <h2 className="font-black text-white uppercase tracking-wide text-sm">
+                {section.title}
+              </h2>
             </div>
             <ul className="space-y-2">
               {section.items.map((item) => (
-                <li
-                  key={item}
-                  className="text-sm text-gray-400 flex gap-2 items-start"
-                >
-                  <span className="text-blue-500 mt-0.5">•</span>
+                <li key={item} className="text-sm text-gray-500 flex gap-2 items-start">
+                  <span className="text-red-600 mt-0.5 font-bold">›</span>
                   {item}
                 </li>
               ))}

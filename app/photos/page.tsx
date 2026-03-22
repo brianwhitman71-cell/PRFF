@@ -2,21 +2,20 @@ export default function PhotosPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-widest text-green-400 mb-1">
+        <p className="text-xs font-bold uppercase tracking-widest text-amber-500 mb-1">
           Gallery
         </p>
-        <h1 className="text-3xl font-bold text-white">📸 Media</h1>
-        <p className="text-gray-500 mt-1">
+        <h1 className="text-3xl font-black text-white uppercase">📸 Media</h1>
+        <p className="text-gray-500 mt-1 text-sm">
           Memories from PRFF events, draft days, and celebrations.
         </p>
       </div>
 
-      {/* Placeholder grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {Array.from({ length: 8 }).map((_, i) => (
           <div
             key={i}
-            className="aspect-square bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-gray-700 text-sm hover:border-white/20 transition-colors"
+            className="aspect-square bg-white/5 border border-white/10 rounded-xl flex items-center justify-center text-gray-700 text-sm hover:border-red-800/50 transition-colors"
           >
             Photo {i + 1}
           </div>
