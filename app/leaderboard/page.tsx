@@ -1,20 +1,10 @@
-async function getStandings() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"}/api/cbs/standings`,
-      { next: { revalidate: 300 } }
-    );
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
+import { getStandings } from "@/lib/standings";
 
 export default async function LeaderboardPage() {
   const data = await getStandings();
   const teams = data?.standings ?? [];
   const displayYear = data?.year;
+  const week = data?.week;
 
   return (
     <div className="space-y-6">
@@ -27,9 +17,16 @@ export default async function LeaderboardPage() {
           {displayYear && (
             <span className="ml-3 text-amber-400">{displayYear}</span>
           )}
+          {week && (
+            <span className="ml-2 text-lg text-gray-500 font-semibold normal-case">
+              · Week {week}
+            </span>
+          )}
         </h1>
         <p className="text-gray-500 mt-1 text-sm">
-          Live from CBS Sports · updates every 5 minutes
+          {process.env.SLEEPER_LEAGUE_ID
+            ? "Live from Sleeper · updates every 5 minutes"
+            : "Live from CBS Sports · updates every 5 minutes"}
         </p>
       </div>
 
@@ -51,8 +48,8 @@ export default async function LeaderboardPage() {
               <tr>
                 <td colSpan={7} className="px-5 py-10 text-center text-gray-600 italic">
                   {data === null
-                    ? "Could not reach CBS Sports — check credentials."
-                    : "No standings available."}
+                    ? "Could not reach league data — check credentials."
+                    : "No standings available yet."}
                 </td>
               </tr>
             ) : (

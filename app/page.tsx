@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getStandings } from "@/lib/standings";
+import { getLeague } from "@/lib/sleeper";
 
 const quickLinks = [
   {
@@ -32,14 +34,33 @@ const quickLinks = [
   },
 ];
 
-const stats = [
-  { label: "Teams", value: "—" },
-  { label: "Season", value: "2025" },
-  { label: "Champion", value: "TBD" },
-  { label: "Weeks Played", value: "—" },
-];
+export default async function Home() {
+  const leagueId = process.env.SLEEPER_LEAGUE_ID;
 
-export default function Home() {
+  let teamsCount = "—";
+  let season = "2025";
+  let week = "—";
+
+  if (leagueId) {
+    try {
+      const [league, data] = await Promise.all([
+        getLeague(leagueId),
+        getStandings(),
+      ]);
+      teamsCount = String(league.total_rosters);
+      season = league.season;
+      week = data?.week != null ? String(data.week) : "—";
+    } catch {
+      // leave defaults
+    }
+  }
+
+  const stats = [
+    { label: "Teams", value: teamsCount },
+    { label: "Season", value: season },
+    { label: "Champion", value: "TBD" },
+    { label: "Weeks Played", value: week },
+  ];
   return (
     <div className="space-y-12">
       {/* Hero */}
